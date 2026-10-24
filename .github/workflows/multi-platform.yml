@@ -22,5 +22,4 @@ jobs:
         env:
           CMAKE_GENERATOR: Ninja
         with:
-          target: windows
-          combine: true
+          target: Win64
