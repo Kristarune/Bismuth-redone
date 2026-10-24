@@ -1,34 +1,20 @@
+name: Build Geode Mod
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [master]
+
 jobs:
   build:
-    name: ${{ matrix.name }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - name: Windows
-            os: windows-latest
-            target: Windows
-          - name: Android32
-            os: ubuntu-latest
-            target: Android32
-          - name: Android64
-            os: ubuntu-latest
-            target: Android64
+    name: Windows
+    runs-on: windows-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Linux dependencies
-        if: runner.os == 'Linux'
-        shell: bash
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y cmake ninja-build
-
       - name: Install Windows dependencies
-        if: runner.os == 'Windows'
         shell: pwsh
         run: |
           choco install cmake ninja -y
@@ -41,5 +27,5 @@ jobs:
         env:
           CMAKE_GENERATOR: Ninja
         with:
-          target: ${{ matrix.target }}
+          target: Windows
           combine: true
