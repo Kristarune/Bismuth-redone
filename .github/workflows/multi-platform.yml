@@ -7,8 +7,9 @@ on:
 
 jobs:
   build:
-    name: Windows
     runs-on: windows-latest
+    env:
+      GEODE_SDK: ${{ github.workspace }}\geode-sdk
 
     steps:
       - name: Checkout repository
@@ -20,7 +21,13 @@ jobs:
       - name: Setup MSVC
         uses: ilammy/msvc-dev-cmd@v1
 
+      - name: Clone Geode SDK
+        shell: pwsh
+        run: |
+          git clone --depth=1 https://github.com/geode-sdk/sdk.git "$env:GITHUB_WORKSPACE\geode-sdk"
+
       - name: Build the mod
-        uses: geode-sdk/build-geode-mod@main
-        with:
-          target: Win64
+        shell: pwsh
+        run: |
+          cmake -B build -S .
+          cmake --build build
