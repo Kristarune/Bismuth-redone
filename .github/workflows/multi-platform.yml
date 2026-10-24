@@ -14,18 +14,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Windows dependencies
-        shell: pwsh
-        run: |
-          choco install cmake ninja -y
-          echo "$env:ProgramFiles\\CMake\\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-          echo "$env:ProgramData\\chocolatey\\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+      - name: Setup Ninja
+        uses: seanmiddleditch/gha-setup-ninja@master
 
       - name: Build the mod
-        id: build
         uses: geode-sdk/build-geode-mod@main
         env:
           CMAKE_GENERATOR: Ninja
         with:
-          target: Windows
+          target: windows
           combine: true
